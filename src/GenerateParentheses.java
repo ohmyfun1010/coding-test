@@ -5,86 +5,32 @@ import java.util.Stack;
 
 public class GenerateParentheses {
 
-    public void dfs(List<String> list,int l,int s,int e,String sb,int n){
-
-        if(l>n*2){
-            sb = sb.substring(0,sb.length()-1);
-            return;
-        }
-
-        if(l==n*2){
-            if(s==e){
-                list.add(String.valueOf(sb));
-            }else{
-                sb = sb.substring(0,sb.length()-1);
-            }
-            return;
-        }
-
-        if(s > n){
-            sb = sb.substring(0,sb.length()-1);
-            return;
-        }
-
-        if(e > n){
-            sb = sb.substring(0,sb.length()-1);
-            return;
-        }
-
-        dfs(list,l+1,s+1,e,sb + "(",n);
-        dfs(list,l+1,s,e+1,sb + ")",n);
-
-    }
-
     public List<String> generateParenthesis(int n) {
-
-        List<String> list = new ArrayList<>();
-        List<String> answer = new ArrayList<>();
-        dfs(list,1,1,0,"(",n);
-
-        if(!list.isEmpty()){
-
-            for(String s : list){
-
-                Stack<String> stack = new Stack<>();
-
-                for(int i = 0;i<s.length();i++){
-
-                    String target = s.substring(i,i+1);
-
-                    if(i==0){
-                        if(target.equals(")")){
-                            break;
-                        }
-                    }
-
-                    if(target.equals(")")){
-                        if(!stack.isEmpty() && stack.peek().equals("(")){
-                            stack.pop();
-                        }
-                    }else{
-                        stack.add(target);
-                    }
-
-                }
-
-                if(stack.isEmpty()){
-                    answer.add(s);
-                }
-
-            }
-
-        }
-
-        return answer;
+        List<String> result = new ArrayList<>();
+        backtrack(result, "", 0, 0, n);
+        return result;
     }
 
-    public static void main(String[] argc){
+    private void backtrack(List<String> result, String current, int open, int close, int n) {
+        if (current.length() == n * 2) {
+            result.add(current);
+            return;
+        }
 
+        // 여는 괄호 추가
+        if (open < n) {
+            backtrack(result, current + "(", open + 1, close, n);
+        }
+
+        // 닫는 괄호 추가
+        if (close < open) {
+            backtrack(result, current + ")", open, close + 1, n);
+        }
+    }
+
+    public static void main(String[] args) {
         GenerateParentheses gp = new GenerateParentheses();
-        List<String> result = gp.generateParenthesis(3);
-        System.out.println("aa");
-
+        System.out.println(gp.generateParenthesis(3));
     }
 
 }
