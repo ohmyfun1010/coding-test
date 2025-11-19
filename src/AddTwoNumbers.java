@@ -1,47 +1,28 @@
 package org.src;
 
-import java.math.BigDecimal;
-
 public class AddTwoNumbers {
 
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
-        StringBuilder one = new StringBuilder();
-        StringBuilder two = new StringBuilder();
+        ListNode dummy = new ListNode(0);
+        ListNode current = dummy;
+        int carry = 0;
 
-        if(l1==null){
-            one.append("0");
-        }else{
-            while(l1.next != null){
-                one.append(l1.val);
-                l1=l1.next;
-            }
-            one.append(l1.val);
-        }
-        if(l2==null){
-            two.append("0");
-        }else{
-            while(l2.next != null){
-                two.append(l2.val);
-                l2=l2.next;
-            }
-            two.append(l2.val);
-        }
-        one = one.reverse();
-        two = two.reverse();
-        BigDecimal intOne = new BigDecimal(one.toString());
-        BigDecimal intTwo = new BigDecimal (two.toString());
-        BigDecimal result = intOne.add(intTwo);
-        String resultString = String.valueOf(result);
-        ListNode prevNode = null;
-        ListNode node = null;
-        for(int i = 0;i<resultString.length();i++){
-            String val = resultString.substring(i,i+1);
-            node = new ListNode(Integer.parseInt(val),prevNode);
-            prevNode = node;
+        while (l1 != null || l2 != null || carry != 0) {
+            int x = (l1 != null) ? l1.val : 0;
+            int y = (l2 != null) ? l2.val : 0;
+
+            int sum = x + y + carry;
+            carry = sum / 10;
+
+            current.next = new ListNode(sum % 10);
+            current = current.next;
+
+            if (l1 != null) l1 = l1.next;
+            if (l2 != null) l2 = l2.next;
         }
 
-        return node;
+        return dummy.next;
 
     }
 
