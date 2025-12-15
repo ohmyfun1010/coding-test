@@ -16,7 +16,7 @@ public class IsomorphicStrings {
         int nextUniqueIndex = 0;
         for(int i = 0;i<s.length();i++){
             String c = s.substring(i,i+1);
-            if(sMap.getOrDefault(c,-1) == -1){
+            if(!sMap.containsKey(c)){
                 sMap.put(c,nextUniqueIndex);
                 sPatternIndices[i] = nextUniqueIndex;
                 nextUniqueIndex++;
@@ -29,7 +29,7 @@ public class IsomorphicStrings {
         nextUniqueIndex = 0;
         for(int i = 0;i<t.length();i++){
             String c = t.substring(i,i+1);
-            if(tMap.getOrDefault(c,-1) == -1){
+            if(!tMap.containsKey(c)){
                 tMap.put(c,nextUniqueIndex);
                 tPatternIndices[i] = nextUniqueIndex;
                 nextUniqueIndex++;
