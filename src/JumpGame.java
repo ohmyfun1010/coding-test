@@ -24,6 +24,6 @@ public class JumpGame {
     }
     public static void main(String[] argc){
         JumpGame main = new JumpGame();
-        System.out.println(main.canJump(new int[]{2,3,2,1,4}));
+        System.out.println(main.canJump(new int[]{2,1,2,1,4}));
     }
 }
