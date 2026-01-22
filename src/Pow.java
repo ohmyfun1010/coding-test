@@ -27,7 +27,7 @@ public class Pow {
 
     public static void main(String[] argc){
         Pow p = new Pow();
-        System.out.println(p.myPow(2.00000,-2147483648));
+        System.out.println(p.myPow(2.00000,10));
     }
 
 }
