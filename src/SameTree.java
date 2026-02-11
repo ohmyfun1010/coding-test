@@ -6,72 +6,30 @@ public class SameTree {
 
     public boolean isSameTree(TreeNode p, TreeNode q) {
 
-        if(p==null && q==null) return true;
-        if(p==null || q==null) return false;
-
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(p);
-
-        List<Integer> list = new ArrayList<>();
-        List<Integer> list2 = new ArrayList<>();
-
-        while(!queue.isEmpty()){
-
-            TreeNode node = queue.poll();
-            if(node==null) {
-                list.add(null);
-                continue;
-            }else{
-                list.add(node.val);
-            }
-
-            if(node.left!=null) {
-                queue.add(node.left);
-            } else {
-                queue.add(null);
-            }
-            if(node.right!=null) {
-                queue.add(node.right);
-            }else{
-                queue.add(null);
-            }
-
-        }
-
-        queue = new LinkedList<>();
         queue.add(q);
 
-        while(!queue.isEmpty()){
+        while (!queue.isEmpty()) {
+            TreeNode n1 = queue.poll();
+            TreeNode n2 = queue.poll();
 
-            TreeNode node = queue.poll();
-            if(node==null) {
-                list2.add(null);
-                continue;
-            }else{
-                list2.add(node.val);
-            }
+            // 둘 다 null이면 문제 없음, 다음 노드로 진행
+            if (n1 == null && n2 == null) continue;
 
-            if(node.left!=null) {
-                queue.add(node.left);
-            } else {
-                queue.add(null);
-            }
-            if(node.right!=null) {
-                queue.add(node.right);
-            }else{
-                queue.add(null);
-            }
+            // 하나만 null이거나 값이 다르면 즉시 false 반환
+            if (n1 == null || n2 == null || n1.val != n2.val) return false;
 
-        }
+            // 왼쪽 자식들 쌍으로 추가
+            queue.add(n1.left);
+            queue.add(n2.left);
 
-        for(int i = 0;i<list.size();i++){
-            if(!Objects.equals(list.get(i), list2.get(i))){
-                return false;
-            }
+            // 오른쪽 자식들 쌍으로 추가
+            queue.add(n1.right);
+            queue.add(n2.right);
         }
 
         return true;
-
 
     }
 
