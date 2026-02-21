@@ -4,22 +4,21 @@ public class TwoSum2 {
 
     public int[] twoSum(int[] numbers, int target) {
 
-        int sum = 0;
+        int left = 0;
+        int right = numbers.length - 1;
 
-        for(int i = 0;i<numbers.length;i++){
+        while (left < right) {
+            int sum = numbers[left] + numbers[right];
 
-            for(int j = i+1;j<numbers.length;j++){
-                sum = numbers[i] + numbers[j];
-                if(sum==target){
-                    return new int[]{i+1,j+1};
-                }
+            if (sum == target) {
+                return new int[]{left + 1, right + 1};
+            } else if (sum < target) {
+                left++; // 합이 작으니 더 큰 숫자가 있는 오른쪽으로
+            } else {
+                right--; // 합이 크니 더 작은 숫자가 있는 왼쪽으로
             }
-
-            sum = 0;
-
         }
-
-        return new int[]{0,0};
+        return new int[]{-1, -1};
 
     }
 
