@@ -8,75 +8,51 @@ import java.util.LinkedList;
 public class NumberofIslands {
 
     public int numIslands(char[][] grid) {
+        if (grid == null || grid.length == 0) return 0;
 
-        if(grid.length==0 || grid[0].length==0) return 0;
-
-        Queue<Map<String,Integer>> queue = new LinkedList<>();
-        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        int n = grid.length;
+        int m = grid[0].length;
+        boolean[][] visited = new boolean[n][m];
         int cnt = 0;
 
-        for(int i = 0;i<grid.length;i++){
-            for(int j = 0;j<grid[0].length;j++){
+        // 상하좌우 방향을 미리 정의 (코드 중복 제거)
+        int[] dx = {-1, 1, 0, 0};
+        int[] dy = {0, 0, -1, 1};
 
-                if(visited[i][j]) continue;
-                if(grid[i][j]=='0') {
-                    visited[i][j] = true;
-                    continue;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                // 땅이고 아직 방문하지 않은 경우만 새로운 섬으로 인정
+                if (grid[i][j] == '1' && !visited[i][j]) {
+                    cnt++;
+
+                    // 1. Map 대신 int[]를 사용하여 메모리 아끼기
+                    Queue<int[]> queue = new LinkedList<>();
+                    queue.add(new int[]{i, j});
+                    visited[i][j] = true; // 2. 큐에 넣는 즉시 방문 처리 (중복 방지 핵심)
+
+                    while (!queue.isEmpty()) {
+                        int[] curr = queue.poll();
+                        int x = curr[0];
+                        int y = curr[1];
+
+                        // 3. 4방향 탐색을 반복문으로 깔끔하게 처리
+                        for (int d = 0; d < 4; d++) {
+                            int nx = x + dx[d];
+                            int ny = y + dy[d];
+
+                            // 경계값 체크 및 땅/방문여부 확인
+                            if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
+                                if (grid[nx][ny] == '1' && !visited[nx][ny]) {
+                                    visited[nx][ny] = true; // 방문 도장 먼저 찍기
+                                    queue.add(new int[]{nx, ny});
+                                }
+                            }
+                        }
+                    }
                 }
-
-                Map<String,Integer> map = new HashMap<>();
-                map.put("x",i);
-                map.put("y",j);
-
-                queue.add(map);
-
-                while(!queue.isEmpty()){
-
-                    Map<String,Integer> target = queue.poll();
-                    int x = target.get("x");
-                    int y = target.get("y");
-
-                    if(x>=0 && x<grid.length && y>=0 && y<grid[0].length && visited[x][y]) continue;
-
-                    if(x-1>=0){
-                        Map<String,Integer> topTarget  = new HashMap<>();
-                        topTarget.put("x",x-1);
-                        topTarget.put("y",y);
-                        if(grid[x-1][y]=='1' && !visited[x-1][y]) queue.add(topTarget);
-                    }
-
-                    if(y-1>=0){
-                        Map<String,Integer> leftTarget = new HashMap<>();
-                        leftTarget.put("x",x);
-                        leftTarget.put("y",y-1);
-                        if(grid[x][y-1]=='1' && !visited[x][y-1]) queue.add(leftTarget);
-                    }
-
-                    if(y+1<grid[0].length){
-                        Map<String,Integer> rightTarget = new HashMap<>();
-                        rightTarget.put("x",x);
-                        rightTarget.put("y",y+1);
-                        if(grid[x][y+1]=='1' && !visited[x][y+1]) queue.add(rightTarget);
-                    }
-
-                    if(x+1<grid.length){
-                        Map<String,Integer> bottomTarget = new HashMap<>();
-                        bottomTarget.put("x",x+1);
-                        bottomTarget.put("y",y);
-                        if(grid[x+1][y]=='1' && !visited[x+1][y]) queue.add(bottomTarget);
-                    }
-
-                    visited[x][y] = true;
-
-                }
-
-                cnt++;
-
             }
         }
-
         return cnt;
-
     }
 
     public static void main(String[] argc){
